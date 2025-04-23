@@ -1,0 +1,5 @@
+#!/bin/zsh
+
+set -euo pipefail
+
+echo "Hello World"
