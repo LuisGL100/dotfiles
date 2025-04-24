@@ -134,3 +134,12 @@ if ! brew list fzf &>/dev/null; then
 else 
   echo 'fzf detected... skipping'
 fi
+
+
+###########
+# VS Code #
+###########
+
+if ! brew list visual-studio-code &>/dev/null; then
+  brew install visual-studio-code
+fi
