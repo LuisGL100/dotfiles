@@ -10,10 +10,15 @@ set -euo pipefail
 # `-s` isn't working, so need to redirect output
 if ! which -s brew &>/dev/null; then
   echo "Homebrew not found... installing"
+
+  current_user="$(whoami)"
+  # "Preauthenticate" user to avoid being prompted later on (this won't switch users)
+  # Lasts for about 15 mins
+  sudo -v
+  [[ "${current_user}" != "$(whoami)" ]] && exit 1
   
   # TODO: run `sudo -v` to "preauthenticate", or try this: https://github.com/ptb/mac-setup/blob/2575eb0c7123b59db8b1c0ea7ded2013cb5175cd/mac-setup.command#L83
-  # NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
   if [[ ! -f ~/.zprofile ]]; then
     echo >> ~/.zprofile
@@ -34,7 +39,9 @@ fi
 if [[ ! -d ~/.oh-my-zsh ]]; then
   echo 'Oh-my-zsh not found... installing'
   
-  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+  # Needs to be an "unattended" install... otherwise, you'll run into this issue:
+  # https://stackoverflow.com/questions/68440855/bash-script-exits-early-after-installing-oh-my-zsh
+  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 
 else
   echo 'Oh-my-zsh detected... skipping'
@@ -143,3 +150,12 @@ fi
 if ! brew list visual-studio-code &>/dev/null; then
   brew install visual-studio-code
 fi
+
+
+########
+# TEMP #
+########
+
+alias ls='ls -laFG'
+alias vsc='open -a /Applications/Visual\ Studio\ Code.app '
+alias vsrc='open -a /Applications/Visual\ Studio\ Code.app ~/.zshrc'
