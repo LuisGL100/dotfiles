@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-set -euo pipefail
+set -Eevuxo pipefail
 
 
 ############
@@ -59,7 +59,7 @@ if ! brew list font-meslo-for-powerlevel10k &>/dev/null; then
   brew install --cask font-meslo-for-powerlevel10k
 
   # Script Editor -> File -> Open dictionary... is very useful
-  osascript -e "tell application \"Terminal\" to set the font name of default settings to \"MesloLGS-NF-Regular\""
+  osascript -e "tell application \"Terminal\" to activate" -e "delay 1" -e "tell application \"Terminal\" to set the font name of default settings to \"MesloLGS-NF-Regular\""
 
 else 
   echo 'NerdFont Meslo detected... skipping'
