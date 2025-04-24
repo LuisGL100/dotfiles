@@ -156,6 +156,7 @@ fi
 # TEMP #
 ########
 
-alias ls='ls -laFG'
-alias vsc='open -a /Applications/Visual\ Studio\ Code.app '
-alias vsrc='open -a /Applications/Visual\ Studio\ Code.app ~/.zshrc'
+echo "\n# Temp" >> ~/.zshrc
+echo "alias ls='ls -laFG'" >> ~/.zshrc
+echo "alias vsc='open -a /Applications/Visual\ Studio\ Code.app '" >> ~/.zshrc
+echo "alias vsrc='open -a /Applications/Visual\ Studio\ Code.app ~/.zshrc'" >> ~/.zshrc
