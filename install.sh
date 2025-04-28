@@ -41,6 +41,10 @@ if [[ ! -d ~/.oh-my-zsh ]]; then
   
   # Needs to be an "unattended" install... otherwise, you'll run into this issue:
   # https://stackoverflow.com/questions/68440855/bash-script-exits-early-after-installing-oh-my-zsh
+  #
+  # There's still some issue with this command... the Terminal makes a sound when it runs
+  # Perhaps I should explore a different approach such as: 
+  # https://www.reddit.com/r/zsh/comments/riokz2/comment/hoymdph/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button
   sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 
 else
@@ -59,6 +63,8 @@ if ! brew list font-meslo-for-powerlevel10k &>/dev/null; then
   brew install --cask font-meslo-for-powerlevel10k
 
   # Script Editor -> File -> Open dictionary... is very useful
+  # The "set font" command works by itself; however, it doesn't work when run from the script for some reason
+  # I'm not sure if it's the "activate" or the "delay" that fixes it, but they work
   osascript -e "tell application \"Terminal\" to activate" -e "delay 1" -e "tell application \"Terminal\" to set the font name of default settings to \"MesloLGS-NF-Regular\""
 
 else 
