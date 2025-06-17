@@ -1,23 +1,27 @@
 #!/bin/zsh
 
-set -Eevuxo pipefail
+############
+# Terminal #
+############
+
+/usr/libexec/PlistBuddy -c 'Set :"Window Settings":Basic:useOptionAsMetaKey true' ~/Library/Preferences/com.apple.Terminal.plist
 
 
 ############
 # Homebrew #
 ############
 
-# `-s` isn't working, so need to redirect output
+# `-s` (silent) isn't working, so need to redirect output
 if ! which -s brew &>/dev/null; then
   echo "Homebrew not found... installing"
 
   current_user="$(whoami)"
-  # "Preauthenticate" user to avoid being prompted later on (this won't switch users)
-  # Lasts for about 15 mins
+  # "Preauthenticate" user to avoid being prompted later on (this won't switch users). Lasts for about 15 mins.
+  # Another option to try later on is this: https://github.com/ptb/mac-setup/blob/2575eb0c7123b59db8b1c0ea7ded2013cb5175cd/mac-setup.command#L83
+  # And yet another option to try: https://github.com/mathiasbynens/dotfiles/blob/c886e139233320e29fd882960ba3dd388d57afd7/.macos#L13
   sudo -v
   [[ "${current_user}" != "$(whoami)" ]] && exit 1
-  
-  # TODO: run `sudo -v` to "preauthenticate", or try this: https://github.com/ptb/mac-setup/blob/2575eb0c7123b59db8b1c0ea7ded2013cb5175cd/mac-setup.command#L83
+
   NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
   if [[ ! -f ~/.zprofile ]]; then
@@ -166,3 +170,11 @@ echo "\n# Temp" >> ~/.zshrc
 echo "alias ls='ls -laFG'" >> ~/.zshrc
 echo "alias vsc='open -a /Applications/Visual\ Studio\ Code.app '" >> ~/.zshrc
 echo "alias vsrc='open -a /Applications/Visual\ Studio\ Code.app ~/.zshrc'" >> ~/.zshrc
+
+
+#################
+# Kill Terminal #
+#################
+
+# This is needed for some changes to take effect
+killall Terminal
