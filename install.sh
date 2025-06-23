@@ -22,18 +22,6 @@ function append_OMZ_Plugin_To_zshrc() {
 
 
 ############
-# Terminal #
-############
-
-# If entry doesn't exist, `Set` will give an error; likewise, `Add` will error if entry exists.
-# On a new machine, this value won't exist.
-/usr/libexec/PlistBuddy -c 'Add :"Window Settings":Basic:useOptionAsMetaKey bool true' ~/Library/Preferences/com.apple.Terminal.plist
-
-# Always show scrollbars
-defaults write NSGlobalDomain AppleShowScrollBars -string "Always"
-
-
-############
 # Homebrew #
 ############
 
@@ -110,6 +98,26 @@ if ! brew list powerlevel10k &>/dev/null && [[ "${check_font}" == "MesloLGS-NF-R
 
   echo '\n# Added by the mac_setup script' >> ~/.zshrc
   echo "source $(brew --prefix)/share/powerlevel10k/powerlevel10k.zsh-theme" >> ~/.zshrc
+
+  curl -fsSL "https://raw.githubusercontent.com/LuisGL100/dotfiles/refs/heads/main/p10k.zsh" -o ~/.p10k.zsh
+
+  touch "zshrc_tmp"
+
+  >>"zshrc_tmp" print -r -- "# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r \"\${XDG_CACHE_HOME:-\$HOME/.cache}/p10k-instant-prompt-\${(%):-%n}.zsh\" ]]; then
+  source \"\${XDG_CACHE_HOME:-\$HOME/.cache}/p10k-instant-prompt-\${(%):-%n}.zsh\"
+fi
+"
+
+  >>"zshrc_tmp" print -r -- "$(cat ~/.zshrc)"
+
+  >>"zshrc_tmp" print -r -- "
+# To customize prompt, run \`p10k configure\` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh"
+
+  mv "zshrc_tmp" "${HOME}/.zshrc"
 
 else
   echo 'P10k already installed, or NerdFont missing... skipping'
@@ -201,13 +209,25 @@ if ! command -v node > /dev/null; then
     append_OMZ_Plugin_To_zshrc "zsh-nvm"
 
     # Manually `source` nvm this time, so we don't have to quit the Terminal to use it
-    export NVM_DIR="$HOME/.nvm"
-    source "$NVM_DIR/nvm.sh"
+    source "$HOME/.oh-my-zsh/custom/plugins/zsh-nvm/zsh-nvm.plugin.zsh"
+
     nvm install --lts
 
 else
     echo "NodeJS detected... skipping"
 fi
+
+############
+# Defaults #
+############
+
+# If entry doesn't exist, `Set` will give an error; likewise, `Add` will error if entry exists.
+# On a new machine, this value won't exist.
+# Also, it needs to be executed after installing NerdFonts; otherwise, the "AppleScript" part overwrites this
+/usr/libexec/PlistBuddy -c 'Add :"Window Settings":Basic:useOptionAsMetaKey bool true' ~/Library/Preferences/com.apple.Terminal.plist
+
+# Always show scrollbars
+defaults write NSGlobalDomain AppleShowScrollBars -string "Always"
 
 
 ########
