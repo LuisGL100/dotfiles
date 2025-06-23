@@ -1,10 +1,36 @@
 #!/bin/zsh
 
+#############
+# Functions #
+#############
+
+# This will modify "~/.zshrc", so make sure no one else is using it
+function append_OMZ_Plugin_To_zshrc() {
+    local PLUGIN_NAME="$1"
+    awk -v my_text="plugins+=(${PLUGIN_NAME})" '
+        /^plugins\+?=/ { last = NR; }
+        { lines[NR] = $0; }
+        END {
+            for (i = 1; i <= NR; i++) {
+                print lines[i];
+                if (i == last) print my_text;
+            }
+        }
+    ' ~/.zshrc > zshrc_temp
+    mv zshrc_temp ~/.zshrc
+}
+
+
 ############
 # Terminal #
 ############
 
-/usr/libexec/PlistBuddy -c 'Set :"Window Settings":Basic:useOptionAsMetaKey true' ~/Library/Preferences/com.apple.Terminal.plist
+# If entry doesn't exist, `Set` will give an error; likewise, `Add` will error if entry exists.
+# On a new machine, this value won't exist.
+/usr/libexec/PlistBuddy -c 'Add :"Window Settings":Basic:useOptionAsMetaKey bool true' ~/Library/Preferences/com.apple.Terminal.plist
+
+# Always show scrollbars
+defaults write NSGlobalDomain AppleShowScrollBars -string "Always"
 
 
 ############
@@ -145,8 +171,9 @@ if ! brew list fzf &>/dev/null; then
   # fzf-tab
   git clone https://github.com/Aloxaf/fzf-tab ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/fzf-tab
 
-  # TODO: `grep "^plugins=(git)$" ~/.zshrc`... but not really needed, since `sed` is checking for the full line
-  sed -i "" '/^plugins=(git)$/ s/)$/ fzf-tab zsh-interactive-cd)/' ~/.zshrc
+  # sed -i "" '/^plugins=(git)$/ s/)$/ fzf-tab zsh-interactive-cd)/' ~/.zshrc
+  append_OMZ_Plugin_To_zshrc "fzf-tab"
+  append_OMZ_Plugin_To_zshrc "zsh-interactive-cd"
 
 else 
   echo 'fzf detected... skipping'
@@ -159,6 +186,27 @@ fi
 
 if ! brew list visual-studio-code &>/dev/null; then
   brew install visual-studio-code
+else
+  echo 'VS Code detected... skipping'
+fi
+
+
+########
+# Node #
+########
+
+if ! command -v node > /dev/null; then
+    git clone https://github.com/lukechilds/zsh-nvm ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-nvm
+
+    append_OMZ_Plugin_To_zshrc "zsh-nvm"
+
+    # Manually `source` nvm this time, so we don't have to quit the Terminal to use it
+    export NVM_DIR="$HOME/.nvm"
+    source "$NVM_DIR/nvm.sh"
+    nvm install --lts
+
+else
+    echo "NodeJS detected... skipping"
 fi
 
 
@@ -177,4 +225,4 @@ echo "alias vsrc='open -a /Applications/Visual\ Studio\ Code.app ~/.zshrc'" >> ~
 #################
 
 # This is needed for some changes to take effect
-killall Terminal
+# killall Terminal
