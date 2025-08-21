@@ -1,4 +1,6 @@
 {
     "editor.renderWhitespace": "all",
-    "workbench.editor.tabActionLocation": "left"
+    "workbench.editor.tabActionLocation": "left",
+    "editor.wordWrap": "on",
+    "files.trimTrailingWhitespace": true
 }

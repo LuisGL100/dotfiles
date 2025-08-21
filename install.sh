@@ -113,7 +113,8 @@ if ! brew list powerlevel10k &>/dev/null && [[ "${check_font}" == "MesloLGS-NF-R
   echo '\n# Added by the mac_setup script' >> ~/.zshrc
   echo "source $(brew --prefix)/share/powerlevel10k/powerlevel10k.zsh-theme" >> ~/.zshrc
 
-  curl -fsSL "https://raw.githubusercontent.com/LuisGL100/dotfiles/refs/heads/main/p10k.zsh" -o ~/.p10k.zsh
+  # TODO: Now that the "dotfiles" repo is being cloned, we could use the local file instead
+  curl -fsSL "https://raw.githubusercontent.com/LuisGL100/dotfiles/refs/heads/main/p10k/p10k.zsh" -o ~/.p10k.zsh
 
   touch "zshrc_tmp"
 
@@ -209,7 +210,8 @@ fi
 if ! brew list visual-studio-code &>/dev/null; then
   brew install visual-studio-code
   mkdir -p ~/Library/Application\ Support/Code/User
-  
+  ln -s ~/Documents/dotfiles/vscode/keybindings.json ~/Library/Application\ Support/Code/User/keybindings.json
+  ln -s ~/Documents/dotfiles/vscode/settings.json ~/Library/Application\ Support/Code/User/settings.json
 else
   echo 'VS Code detected... skipping'
 fi
