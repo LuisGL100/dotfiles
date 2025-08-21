@@ -1,0 +1,38 @@
+[
+    {
+        "key": "ctrl+shift+up",    // whatever keybinding you want
+        "command": "cursorMove",
+        "args": {
+            "to": "prevBlankLine",
+            "select": false         // false is the default if omitted
+        },
+        "when": "editorTextFocus"
+    },
+    {
+        "key": "ctrl+shift+down",
+        "command": "cursorMove",
+        "args": {
+            "to": "nextBlankLine",
+            "select": false         // false is the default if omitted
+        },
+        "when": "editorTextFocus"
+    },
+    {
+        "key": "ctrl+shift+[",    // whatever keybinding you want
+        "command": "cursorMove",
+        "args": {
+            "to": "prevBlankLine",
+            "select": true         // false is the default if omitted
+        },
+        "when": "editorTextFocus"
+    },
+    {
+        "key": "ctrl+shift+]",
+        "command": "cursorMove",
+        "args": {
+            "to": "nextBlankLine",
+            "select": true         // false is the default if omitted
+        },
+        "when": "editorTextFocus"
+    },
+]

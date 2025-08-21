@@ -50,6 +50,20 @@ else
 fi
 
 
+############
+# Dotfiles #
+############
+
+if [[ ! -d ~/Documents/dotfiles ]]; then
+  echo 'Dotfiles not found... installing'
+  
+  git clone https://github.com/LuisGL100/dotfiles.git ~/Documents/dotfiles
+
+else
+  echo 'Dotfiles detected... skipping'
+fi
+
+
 ##############
 # Oh-my-zsh! #
 ##############
@@ -194,6 +208,8 @@ fi
 
 if ! brew list visual-studio-code &>/dev/null; then
   brew install visual-studio-code
+  mkdir -p ~/Library/Application\ Support/Code/User
+  
 else
   echo 'VS Code detected... skipping'
 fi
