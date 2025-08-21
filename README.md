@@ -44,7 +44,7 @@ Once you’re past the initial macOS setup screens:
 
 4. When the script completes, it will automatically quit the Terminal.
 
-5. Re-launch the Terminal, and follow the prompts to finish setting up **Powerlevel10k (P10k)**.
+5. Re-launch the Terminal, ~~and follow the prompts to finish setting up **Powerlevel10k (P10k)**~~ (this is now automated 🎉).
 
 6. Done 🎉
 
@@ -91,6 +91,10 @@ For a deeper explanation, watch [this WWDC video](https://www.youtube.com/watch?
    rm -Rf ~/VM.bundle
    cp -r ~/VMPristine.bundle ~/VM.bundle
    ```
+
+7. If anything happens to the "pristine" copy, you can always create another one by re-running any of the `InstallationTool-X` schemes.
+   If you still happen to have the `*.ipsw` downloaded in Step 1, add its path to the Scheme's "Arguments passed on launch" in the "Run" step, to avoid downloading it again. 
+   The default path should be `$(HOME)/RestoreImage.ipsw`, unless you changed it.
 
 ---
 
