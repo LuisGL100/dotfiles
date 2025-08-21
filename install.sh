@@ -20,6 +20,18 @@ function append_OMZ_Plugin_To_zshrc() {
     mv zshrc_temp ~/.zshrc
 }
 
+#
+function install_cask_if_required() {
+  local APP=$1
+  brew list "${APP}" &>/dev/null || brew install --cask "${APP}";
+}
+
+#
+function install_if_required() {
+  local APP=$1
+  brew list "${APP}" &>/dev/null || brew install "${APP}";
+}
+
 
 ############
 # Homebrew #
@@ -42,7 +54,7 @@ if ! which -s brew &>/dev/null; then
     echo >> ~/.zprofile
     echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
     eval "$(/opt/homebrew/bin/brew shellenv)"
-  else 
+  else
     echo '.zprofile already exists'
   fi
 else
@@ -56,11 +68,23 @@ fi
 
 if [[ ! -d ~/Documents/dotfiles ]]; then
   echo 'Dotfiles not found... installing'
-  
+
   git clone https://github.com/LuisGL100/dotfiles.git ~/Documents/dotfiles
 
 else
   echo 'Dotfiles detected... skipping'
+fi
+
+
+#######
+# Git #
+#######
+
+if [[ ! -f ~/.gitconfig ]]; then
+  echo 'Git config not found... installing'
+  ln -s ~/Documents/dotfiles/git/gitconfig ~/.gitconfig
+else
+  echo 'Git config detected... skipping'
 fi
 
 
@@ -70,14 +94,16 @@ fi
 
 if [[ ! -d ~/.oh-my-zsh ]]; then
   echo 'Oh-my-zsh not found... installing'
-  
+
   # Needs to be an "unattended" install... otherwise, you'll run into this issue:
   # https://stackoverflow.com/questions/68440855/bash-script-exits-early-after-installing-oh-my-zsh
   #
   # There's still some issue with this command... the Terminal makes a sound when it runs
-  # Perhaps I should explore a different approach such as: 
+  # Perhaps I should explore a different approach such as:
   # https://www.reddit.com/r/zsh/comments/riokz2/comment/hoymdph/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button
   sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+
+  ln -s ~/Documents/dotfiles/ohmyzsh/my_zsh.zsh ~/.oh-my-zsh/custom/
 
 else
   echo 'Oh-my-zsh detected... skipping'
@@ -99,7 +125,7 @@ if ! brew list font-meslo-for-powerlevel10k &>/dev/null; then
   # I'm not sure if it's the "activate" or the "delay" that fixes it, but they work
   osascript -e "tell application \"Terminal\" to activate" -e "delay 1" -e "tell application \"Terminal\" to set the font name of default settings to \"MesloLGS-NF-Regular\""
 
-else 
+else
   echo 'NerdFont Meslo detected... skipping'
 fi
 
@@ -107,7 +133,7 @@ fi
 check_font=$(osascript -e "tell application \"Terminal\" to get the font name of window 1")
 if ! brew list powerlevel10k &>/dev/null && [[ "${check_font}" == "MesloLGS-NF-Regular"  ]]; then
   echo 'P10k not detected... installing'
-  
+
   brew install romkatv/powerlevel10k/powerlevel10k
 
   echo '\n# Added by the mac_setup script' >> ~/.zshrc
@@ -184,7 +210,7 @@ if ! brew list fzf &>/dev/null; then
 
   echo '\n# Added by the mac_setup script' >> ~/.zshrc
 
-  # Single quotes not needed to prevent "process substitution"... this is why: 
+  # Single quotes not needed to prevent "process substitution"... this is why:
   # https://www.gnu.org/software/bash/manual/html_node/Double-Quotes.html
   # It is also why VS Code doesn't highlight `fzf --zsh` as a command (unlike `brew --prefix` above)
   # As further proof... try surrounding the parenthesis with backticks, like so: `(fzf --zsh)`
@@ -198,7 +224,7 @@ if ! brew list fzf &>/dev/null; then
   append_OMZ_Plugin_To_zshrc "fzf-tab"
   append_OMZ_Plugin_To_zshrc "zsh-interactive-cd"
 
-else 
+else
   echo 'fzf detected... skipping'
 fi
 
@@ -234,6 +260,14 @@ if ! command -v node > /dev/null; then
 else
     echo "NodeJS detected... skipping"
 fi
+
+
+#############
+# Utilities #
+#############
+
+install_cask_if_required fork
+
 
 ############
 # Defaults #
