@@ -103,7 +103,7 @@ if [[ ! -d ~/.oh-my-zsh ]]; then
   # https://www.reddit.com/r/zsh/comments/riokz2/comment/hoymdph/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button
   sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 
-  ln -s ~/Documents/dotfiles/ohmyzsh/my_zshrc.zsh ~/.oh-my-zsh/custom/
+  ln -s ~/Documents/dotfiles/ohmyzsh/my_zshrc.zsh ~/.oh-my-zsh/custom/my_zshrc.zsh
 
 else
   echo 'Oh-my-zsh detected... skipping'
@@ -287,7 +287,7 @@ defaults write NSGlobalDomain AppleShowScrollBars -string "Always"
 ########
 
 echo "\n# Temp" >> ~/.zshrc
-echo "alias ls='ls -laFG'" >> ~/.zshrc
+echo "alias lz='ls -laFG'" >> ~/.zshrc
 echo "alias vsc='open -a /Applications/Visual\ Studio\ Code.app '" >> ~/.zshrc
 echo "alias vsrc='open -a /Applications/Visual\ Studio\ Code.app ~/.zshrc'" >> ~/.zshrc
 
