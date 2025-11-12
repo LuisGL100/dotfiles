@@ -243,7 +243,7 @@ fi
 ###########
 
 if ! brew list visual-studio-code &>/dev/null; then
-  brew install visual-studio-code
+  brew install --cask visual-studio-code
   mkdir -p ~/Library/Application\ Support/Code/User
   ln -s ~/Documents/dotfiles/vscode/keybindings.json ~/Library/Application\ Support/Code/User/keybindings.json
   ln -s ~/Documents/dotfiles/vscode/settings.json ~/Library/Application\ Support/Code/User/settings.json
@@ -268,6 +268,24 @@ if ! command -v node > /dev/null; then
 
 else
     echo "NodeJS detected... skipping"
+fi
+
+
+##########
+# iTerm2 #
+##########
+
+if ! brew list iterm2 &>/dev/null; then
+  brew install --cask iterm2
+  cp ~/Documents/dotfiles/iterm2/iterm2_initial_prefs.plist ~/Library/Preferences/com.googlecode.iterm2.plist
+  xattr -c ~/Library/Preferences/com.googlecode.iterm2.plist
+  xattr -c ~/Documents/dotfiles/iterm2/shared_prefs/com.googlecode.iterm2.plist
+  defaults write com.googlecode.iterm2 LoadPrefsFromCustomFolder -bool true
+  defaults write com.googlecode.iterm2 PrefsCustomFolder -string "$HOME/Documents/dotfiles/iterm2/shared_prefs"
+  defaults write com.googlecode.iterm2 NoSyncNeverRemindPrefsChangesLostForFile -bool true
+  defaults write com.googlecode.iterm2 NoSyncNeverRemindPrefsChangesLostForFile_selection -int 2
+else
+  echo 'iTerm2 detected... skipping'
 fi
 
 
