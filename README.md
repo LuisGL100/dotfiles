@@ -37,7 +37,7 @@ Once you’re past the initial macOS setup screens:
    Then, when ready:
 
    ```bash
-   zsh mac_setup.sh
+   caffeinate zsh mac_setup.sh
    ```
 
 3. Enter your password when prompted (for `sudo`). This is required only once, to install [Homebrew](https://brew.sh/).
@@ -93,7 +93,7 @@ For a deeper explanation, watch [this WWDC video](https://www.youtube.com/watch?
    ```
 
 7. If anything happens to the "pristine" copy, you can always create another one by re-running any of the `InstallationTool-X` schemes.
-   If you still happen to have the `*.ipsw` downloaded in Step 1, add its path to the Scheme's "Arguments passed on launch" in the "Run" step, to avoid downloading it again. 
+   If you still happen to have the `*.ipsw` downloaded in Step 1, add its path to the Scheme's "Arguments passed on launch" in the "Run" step, to avoid downloading it again.
    The default path should be `$(HOME)/RestoreImage.ipsw`, unless you changed it.
 
 ---

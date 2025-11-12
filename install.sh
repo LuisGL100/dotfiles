@@ -33,6 +33,20 @@ function install_if_required() {
 }
 
 
+###############
+# Sudo access #
+###############
+
+# First, "Preauthenticate" user to avoid being prompted later on (this won't switch users). Lasts for about 15 mins.
+current_user="$(whoami)"
+sudo -v
+[[ "${current_user}" != "$(whoami)" ]] && exit 1
+
+# Keep-alive: update existing `sudo` time stamp until this script finishes
+# https://github.com/mathiasbynens/dotfiles/blob/c886e139233320e29fd882960ba3dd388d57afd7/.macos#L13
+while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
+
+
 ############
 # Homebrew #
 ############
@@ -40,13 +54,6 @@ function install_if_required() {
 # `-s` (silent) isn't working, so need to redirect output
 if ! which -s brew &>/dev/null; then
   echo "Homebrew not found... installing"
-
-  current_user="$(whoami)"
-  # "Preauthenticate" user to avoid being prompted later on (this won't switch users). Lasts for about 15 mins.
-  # Another option to try later on is this: https://github.com/ptb/mac-setup/blob/2575eb0c7123b59db8b1c0ea7ded2013cb5175cd/mac-setup.command#L83
-  # And yet another option to try: https://github.com/mathiasbynens/dotfiles/blob/c886e139233320e29fd882960ba3dd388d57afd7/.macos#L13
-  sudo -v
-  [[ "${current_user}" != "$(whoami)" ]] && exit 1
 
   NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
@@ -62,13 +69,14 @@ else
 fi
 
 
-############
-# Dotfiles #
-############
+#################
+# Dotfiles Repo #
+#################
 
 if [[ ! -d ~/Documents/dotfiles ]]; then
   echo 'Dotfiles not found... installing'
 
+  # We'll be able to `clone` and `pull`, but not `push`. This is ok for now.
   git clone https://github.com/LuisGL100/dotfiles.git ~/Documents/dotfiles
 
 else
@@ -140,7 +148,8 @@ if ! brew list powerlevel10k &>/dev/null && [[ "${check_font}" == "MesloLGS-NF-R
   echo "source $(brew --prefix)/share/powerlevel10k/powerlevel10k.zsh-theme" >> ~/.zshrc
 
   # TODO: Now that the "dotfiles" repo is being cloned, we could use the local file instead
-  curl -fsSL "https://raw.githubusercontent.com/LuisGL100/dotfiles/refs/heads/main/p10k/p10k.zsh" -o ~/.p10k.zsh
+  # curl -fsSL "https://raw.githubusercontent.com/LuisGL100/dotfiles/refs/heads/main/p10k/p10k.zsh" -o ~/.p10k.zsh
+  ln -s ~/Documents/dotfiles/p10k/p10k.zsh ~/.p10k.zsh
 
   touch "zshrc_tmp"
 

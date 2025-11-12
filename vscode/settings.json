@@ -2,5 +2,6 @@
     "editor.renderWhitespace": "all",
     "workbench.editor.tabActionLocation": "left",
     "editor.wordWrap": "on",
-    "files.trimTrailingWhitespace": true
+    "files.trimTrailingWhitespace": true,
+    "editor.fontFamily": "'MesloLGS NF', Menlo, Monaco, 'Courier New', monospace"
 }
